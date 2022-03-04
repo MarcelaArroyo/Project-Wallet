@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { actionEmail } from '../reducers/user';
+import './Login.css';
 
 class Login extends React.Component {
   state = {
@@ -35,37 +36,40 @@ class Login extends React.Component {
     const { email, senha, disabled } = this.state;
     const { emailLogin } = this.props;
     return (
-      <div>
-        <label htmlFor="email">
-          Email:
-          <input
-            data-testid="email-input"
-            type="email"
-            name="email"
-            value={ email }
-            onChange={ this.handleChange }
-          />
-        </label>
-        <label htmlFor="senha">
-          Senha:
-          <input
-            data-testid="password-input"
-            type="password"
-            name="senha"
-            value={ senha }
-            onChange={ this.handleChange }
-          />
-        </label>
-        <Link to="/carteira">
-          <button
-            type="button"
-            onClick={ () => emailLogin(email) }
-            disabled={ disabled }
-          >
-            Entrar
-          </button>
-        </Link>
-      </div>
+      <section className="container">
+        <form className="login">
+          <h1>Trybe</h1>
+          <label htmlFor="email">
+            <input
+              data-testid="email-input"
+              type="email"
+              name="email"
+              value={ email }
+              onChange={ this.handleChange }
+              placeholder="Digite seu email"
+            />
+          </label>
+          <label htmlFor="senha">
+            <input
+              data-testid="password-input"
+              type="password"
+              name="senha"
+              value={ senha }
+              onChange={ this.handleChange }
+              placeholder="Digite sua senha"
+            />
+          </label>
+          <Link to="/carteira">
+            <button
+              type="button"
+              onClick={ () => emailLogin(email) }
+              disabled={ disabled }
+            >
+              Entrar
+            </button>
+          </Link>
+        </form>
+      </section>
     );
   }
 }
