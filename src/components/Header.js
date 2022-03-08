@@ -22,13 +22,13 @@ class Header extends React.Component {
     const { expensesWallet } = this.props;
     // número da posição do último elemento do array
     const lastElement = expensesWallet.length - 1;
-    // acessando os valores das chaves currency e value do último elemento
-    // que foi adicionado ao clicar no botão "Adicionar despesas"
+    // // acessando os valores das chaves currency e value do último elemento
+    // // que foi adicionado ao clicar no botão "Adicionar despesas"
     const { currency, value } = expensesWallet[lastElement];
-    // acessando o objeto da chave exchangeRates, onde esse objeto possui
-    // sua chave igual ao currency
+    // // acessando o objeto da chave exchangeRates, onde esse objeto possui
+    // // sua chave igual ao currency
     const rate = expensesWallet[lastElement].exchangeRates[currency];
-    // acessando o valor da chave ask do objeto
+    // // acessando o valor da chave ask do objeto
     const { ask } = rate;
     totalField += value * ask;
     this.setState({

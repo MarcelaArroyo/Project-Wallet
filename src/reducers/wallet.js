@@ -20,7 +20,6 @@ export const fetchExchangeRatesAPI = (state) => (dispatch) => {
 function formWalletReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
   case 'ACTION_FORM':
-    // console.log(action.payload);
     return { ...state, expenses: [...state.expenses, action.payload] };
   default:
     return { ...state };

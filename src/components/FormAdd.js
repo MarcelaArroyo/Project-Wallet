@@ -6,40 +6,60 @@ import { fetchExchangeRatesAPI } from '../reducers/wallet';
 class FormAdd extends React.Component {
   state = {
     id: 0,
-    value: '',
+    value: 0,
     description: '',
     currency: 'USD',
-    method: 'Dinheiro',
-    tag: 'Alimentação',
+    method: '',
+    tag: '',
+    currencys: [],
+  };
+
+  componentDidMount() {
+    this.fetchCurrencysAPI();
   }
+
+  fetchCurrencysAPI = () => {
+    fetch('https://economia.awesomeapi.com.br/json/all')
+      .then((response) => response.json())
+      .then((data) => {
+        const keys = Object.keys(data);
+        const currencys = keys.filter((key) => key !== 'USDT');
+        return this.setState({
+          currencys,
+        });
+      });
+  };
 
   handleChange = ({ target: { name, value } }) => {
     this.setState({
       [name]: value,
     });
-  }
+  };
 
   handleClick = () => {
     const { stateFormWallet } = this.props;
-    stateFormWallet({ ...this.state });
+    // passando o state menos a chave currencys
+    const { currencys, ...resto } = this.state;
+    stateFormWallet(resto);
     this.setState((prevState) => ({
       id: prevState.id + 1,
+      value: 0,
+      description: '',
+      currency: 'USD',
+      method: '',
+      tag: '',
     }));
-  }
+  };
 
   render() {
-    const { value,
-      description,
-      currency,
-      method,
-      tag,
-    } = this.state;
+    const { value, description, currency, method, tag, currencys } = this.state;
     return (
       <section>
         <form>
-          <label htmlFor={ value }>
-            Valor:
+          <label htmlFor="value">
+            Valor
             <input
+              id="value"
               data-testid="value-input"
               type="number"
               name="value"
@@ -47,9 +67,10 @@ class FormAdd extends React.Component {
               onChange={ this.handleChange }
             />
           </label>
-          <label htmlFor={ description }>
-            Descrição:
+          <label htmlFor="description">
+            Descrição
             <input
+              id="description"
               data-testid="description-input"
               type="text"
               name="description"
@@ -57,34 +78,44 @@ class FormAdd extends React.Component {
               onChange={ this.handleChange }
             />
           </label>
-          <label htmlFor={ currency }>
-            Moeda:
+          <label htmlFor="moeda">
+            Moeda
             <select
+              id="moeda"
               name="currency"
               data-testid="currency-input"
               onChange={ this.handleChange }
+              value={ currency }
             >
-              <option value="USD">USD</option>
+              {currencys.map((option) => (
+                <option key={ option } value={ option } data-testid={ option }>
+                  {option}
+                </option>
+              ))}
             </select>
           </label>
-          <label htmlFor={ method }>
-            Método de pagamento:
+          <label htmlFor="method">
+            Método de pagamento
             <select
+              id="method"
               name="method"
               data-testid="method-input"
               onChange={ this.handleChange }
+              value={ method }
             >
               <option value="Dinheiro">Dinheiro</option>
               <option value="Cartão de crédito">Cartão de crédito</option>
               <option value="Cartão de débito">Cartão de débito</option>
             </select>
           </label>
-          <label htmlFor={ tag }>
-            Tag:
+          <label htmlFor="tag">
+            Tag
             <select
+              id="tag"
               name="tag"
               data-testid="tag-input"
               onChange={ this.handleChange }
+              value={ tag }
             >
               <option value="Alimentação">Alimentação</option>
               <option value="Lazer">Lazer</option>
@@ -93,10 +124,7 @@ class FormAdd extends React.Component {
               <option value="Saúde">Saúde</option>
             </select>
           </label>
-          <button
-            type="button"
-            onClick={ this.handleClick }
-          >
+          <button type="button" onClick={ this.handleClick }>
             Adicionar despesa
           </button>
         </form>
@@ -106,7 +134,9 @@ class FormAdd extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  stateFormWallet: (state) => { dispatch(fetchExchangeRatesAPI(state)); },
+  stateFormWallet: (state) => {
+    dispatch(fetchExchangeRatesAPI(state));
+  },
 });
 
 FormAdd.propTypes = {
